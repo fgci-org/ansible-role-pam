@@ -11,9 +11,17 @@ Teste with Ansible 1.9.4
 Role Variables
 --------------
 
+Defaults given
+
 ```
-# enable sssd in pam (default value given)
+pam_enabled: False
+
 pam_use_sssd: False
+
+# Use per-user /tmp, /var/tmp and /dev/shm directories?
+pam_use_namespace: False
+pam_tmp_inst_dir: /l/tmp-inst/
+pam_var_tmp_inst_dir: /l/vartmp_inst/
 ```
 
 Dependencies
@@ -39,4 +47,7 @@ Version 2.0, January 2004
 
 Author Information
 ------------------
+
 https://github.com/mhakala
+
+https://github.com/jabl
