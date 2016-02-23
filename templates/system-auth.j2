@@ -15,6 +15,10 @@ account     sufficient    pam_succeed_if.so uid < 1000 quiet
 {% if pam_use_sssd %}
 account     [default=bad success=ok user_unknown=ignore] pam_sss.so
 {% endif %}
+{% if pam_enable_slurm %}
+account     sufficient    pam_access.so
+account     required      pam_slurm.so
+{% endif %}
 account     required      pam_permit.so
 
 password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=

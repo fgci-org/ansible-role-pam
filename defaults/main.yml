@@ -4,6 +4,16 @@ pam_enabled: False
 
 pam_use_sssd: False
 
+# Enable the pam_slurm.so module
+pam_enable_slurm: False
+
+# These are allowed in /etc/security/access.conf, set when
+# pam_enable_slurm == True
+slurm_access_groups:
+ - "{{ admingroup | default('admin') }}"
+ - "root"
+ - "wheel"
+
 # Use per-user /tmp, /var/tmp and /dev/shm directories?
 pam_use_namespace: False
 pam_tmp_inst_dir: /l/tmp-inst/

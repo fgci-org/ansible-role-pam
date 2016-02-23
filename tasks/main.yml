@@ -15,3 +15,18 @@
   template: src=site.conf.j2 dest=/etc/security/namespace.d/site.conf
             owner=root group=root mode=0644
   when: pam_enabled
+
+- name: lineinfile add admin groups to /etc/security/access.conf
+  lineinfile: 'dest="/etc/security/access.conf"
+              regexp="(^\+\:{{ item }}\:ALL$)"
+              line="+:{{ item }}:ALL"'
+  register: reg_slurm_access_conf
+  with_items: slurm_access_groups
+  when: pam_enabled and pam_enable_slurm
+
+- name: lineinfile deny all at the end of /etc/security/access.conf
+  lineinfile: 'dest="/etc/security/access.conf"
+               regexp="(^\-\:ALL\:ALL$)"
+               line="-:ALL:ALL"
+               insertafter="EOF"'
+  when: reg_slurm_access_conf|success and pam_enabled and pam_enable_slurm
