@@ -21,7 +21,7 @@
               regexp="(^\+\:{{ item }}\:ALL$)"
               line="+:{{ item }}:ALL"'
   register: reg_slurm_access_conf
-  with_items: slurm_access_groups
+  with_items: "{{ slurm_access_groups }}"
   when: pam_enabled and pam_enable_slurm
 
 - name: lineinfile deny all at the end of /etc/security/access.conf
