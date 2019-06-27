@@ -4,17 +4,17 @@
 - name: template pam.d system-auth
   template: src=system-auth.j2 dest=/etc/pam.d/system-auth
             owner=root group=root mode=0644
-  when: pam_enabled
+  when: pam_enabled|bool
 
 - name: template pam.d password-auth
   template: src=system-auth.j2 dest=/etc/pam.d/password-auth
             owner=root group=root mode=0644
-  when: pam_enabled
+  when: pam_enabled|bool
 
 - name: template /etc/security/namespace.d/site.conf
   template: src=site.conf.j2 dest=/etc/security/namespace.d/site.conf
             owner=root group=root mode=0644
-  when: pam_enabled
+  when: pam_enabled|bool
 
 - name: lineinfile add admin groups to /etc/security/access.conf
   lineinfile: 'dest="/etc/security/access.conf"
@@ -22,11 +22,11 @@
               line="+:{{ item }}:ALL"'
   register: reg_slurm_access_conf
   with_items: "{{ slurm_access_groups }}"
-  when: pam_enabled and pam_enable_slurm
+  when: pam_enabled|bool and pam_enable_slurm|bool
 
 - name: lineinfile deny all at the end of /etc/security/access.conf
   lineinfile: 'dest="/etc/security/access.conf"
                regexp="(^\-\:ALL\:ALL$)"
                line="-:ALL:ALL"
                insertafter="EOF"'
-  when: reg_slurm_access_conf is success and pam_enabled and pam_enable_slurm
+  when: reg_slurm_access_conf is success and pam_enabled|bool and pam_enable_slurm|bool
