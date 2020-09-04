@@ -1,0 +1,34 @@
+---
+- name: Verify pam enabled
+  hosts: all
+  tasks:
+  #- command: cat /etc/pam.d/system-auth
+  #  register: catcmd
+  #- debug:
+  #    var: catcmd.stdout_lines
+  - name: Check whether /etc/pam.d/system-auth is populated
+    command: 'grep "#%PAM-1.0" /etc/pam.d/system-auth'
+
+- name: No slurm pam tests
+  hosts: noslurm
+  tasks:
+  - name: Check that localuser.so is in /etc/pam.d/system-auth
+    command: 'grep "account     sufficient    pam_localuser.so" /etc/pam.d/system-auth'
+  - name: Check that slurm is not mentioned in /etc/pam.d/system-auth
+    command: 'grep -v slurm /etc/pam.d/system-auth'
+
+- name: Slurm pam tests
+  hosts: pam-slurm
+  tasks:
+  - name: Check that localuser.so is in /etc/pam.d/system-auth
+    command: 'grep "account     sufficient    pam_localuser.so" /etc/pam.d/system-auth'
+  - name: Check pam_slurm.so is in /etc/pam.d/system-auth
+    command: 'grep "account     required      pam_slurm.so" /etc/pam.d/system-auth'
+
+- name: Slurm adopt pam tests
+  hosts: pam-slurm-adopt
+  tasks:
+  - name: Check that localuser.so is not in /etc/pam.d/system-auth
+    command: 'grep -v "account     sufficient    pam_localuser.so" /etc/pam.d/system-auth'
+  - name: Check pam_slurm_adopt.so is in /etc/pam.d/system-auth
+    command: 'grep "\-account     sufficient    pam_slurm_adopt.so action_adopt_failure=deny action_generic_failure=deny" /etc/pam.d/system-auth'
