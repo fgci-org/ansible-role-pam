@@ -7,6 +7,9 @@ pam_use_sssd: False
 # Enable the pam_slurm.so module
 pam_enable_slurm: False
 
+# Enable the pam_slurm_adopt.so module
+pam_enable_slurm_adopt: False
+
 # These are allowed in /etc/security/access.conf, set when
 # pam_enable_slurm == True
 slurm_access_groups:

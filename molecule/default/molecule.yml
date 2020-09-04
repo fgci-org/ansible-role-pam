@@ -1,0 +1,35 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: noslurm
+    image: docker.io/pycontribs/centos:8
+    pre_build_image: true
+    groups:
+      - pam
+  - name: pam-slurm
+    image: docker.io/pycontribs/centos:8
+    pre_build_image: true
+    groups:
+      - pam
+      - pam_slurm
+  - name: pam-slurm-adopt
+    image: docker.io/pycontribs/centos:8
+    pre_build_image: true
+    groups:
+      - pam
+      - pam_slurm_adopt
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      pam:
+        pam_enabled: True
+      pam_slurm:
+        pam_enable_slurm: True
+      pam_slurm_adopt:
+        pam_enable_slurm_adopt: True
+verifier:
+  name: ansible
