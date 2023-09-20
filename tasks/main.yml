@@ -30,3 +30,15 @@
                line="-:ALL:ALL"
                insertafter="EOF"'
   when: reg_slurm_access_conf is success and pam_enabled|bool and pam_enable_slurm|bool
+
+# remove first tailing slash if there and then take the dirname to get parent dir path as item
+- name: Ensure pam namespace parent directories exist
+  ansible.builtin.file:
+    dest: "{{ item | regex_replace('^(.*)/$', '\\1') | dirname }}"
+    state: directory
+    mode: 'u=rwx,g=rx,o=rx'
+    recurse: true
+  when: pam_use_namespace is defined
+  loop:
+    - "{{ pam_tmp_inst_dir }}"
+    - "{{ pam_var_tmp_inst_dir }}"
