@@ -37,7 +37,6 @@
     dest: "{{ item | regex_replace('^(.*)/$', '\\1') | dirname }}"
     state: directory
     mode: 'u=rwx,g=rx,o=rx'
-    recurse: true
   when: pam_use_namespace is defined
   loop:
     - "{{ pam_tmp_inst_dir }}"
