@@ -17,7 +17,7 @@ account     sufficient    pam_succeed_if.so uid < 1000 quiet
 {% if pam_use_sssd %}
 account     [default=bad success=ok user_unknown=ignore] pam_sss.so
 {% endif %}
-{% if pam_enable_slurm %}
+{% if pam_enable_slurm and not pam_enable_slurm_adopt %}
 account     sufficient    pam_access.so
 account     required      pam_slurm.so
 {% elif pam_enable_slurm_adopt %}
