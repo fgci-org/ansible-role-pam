@@ -11,8 +11,8 @@
             owner=root group=root mode=0644
   when: pam_enabled|bool
 
-- name: template /etc/security/namespace.d/site.conf
-  template: src=site.conf.j2 dest=/etc/security/namespace.d/site.conf
+- name: template /etc/security/namespace.conf
+  template: src=site.conf.j2 dest=/etc/security/namespace.conf
             owner=root group=root mode=0644
   when: pam_enabled|bool
 
